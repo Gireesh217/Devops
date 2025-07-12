@@ -1,0 +1,101 @@
+# Provider Configuration
+aws_region      = "us-east-1"
+root_profile    = "root"
+child_profile   = "child-ab"
+ 
+
+# Organization SCP Policy Configuration
+scp_policy_config = {
+  name         = "require-specific-ec2-iam-profile"
+  description  = "Deny EC2 instance creation without specific IAM instance profile"
+  instance_profile = "Ssm-ManagedinstanceProfile"
+  keypair_policy_description = "SCP to deny the creation of new SSH Key Pairs in EC2"
+  keypair_policy_name = "DenyCreateKeyPairsPolicy"
+  region_policy_name = "EC2-creation-restricted-region"
+  region_policy_description = "TO deny ec2 creation in some regions"
+  restricted_regions = "us-west-2"
+  ec2_instance_arns = [
+    "arn:aws:ec2:us-east-1:980921723805:instance/i-025014dea0d207813"
+  ]
+  deny_stop_scp_name = "DenyStopTerminate--EC2's"
+ deny_stop_scp_description = "This SCP denies stopping or terminating specific EC2 instances"
+  # Root Account 
+  root_account = {
+    id = "420366434163"  # Replace with your actual root account ID
+  }
+
+instnace_type_name = "RestrictEC2InstanceType"
+instance_description = "Deny launching EC2 instances that are not t2.medium"
+instance_type = "t2.medium"
+
+}
+
+### S3 Data
+
+aws_iam_role = "S3ProtectionRole"
+ 
+# Target Accounts for Policy Attachment
+target_accounts = {
+  account_1 = {
+    id       = "980921723805"
+    enabled  = true
+  },
+  account_2 = {
+    id       = "324037301044"
+    enabled  = false
+  },
+  account_3 = {
+    id       = "345678901234"
+    enabled  = false
+  }
+}
+ 
+# IAM Configuration
+iam_config = {
+  # SSM Managed Instance Policy
+  ssm_policy = {
+    name        = "SsmManagedInstancePolicy"
+    description = "Policy for SSM managed EC2 instances"
+  }
+  
+  # EC2 Launch Policy
+  ec2_launch_policy = {
+    name        = "EC2LaunchWithSSMProfilePolicy"
+    description = "Policy that allows launching EC2 instances with SSM managed instance profile"
+  }
+  
+  # IAM Role Configuration
+  role = {
+    name               = "SsmManagedInstanceRole"
+    instance_profile   = "Ssm-ManagedinstanceProfile"
+    service_principal = "ec2.amazonaws.com"
+  }
+  
+  # IAM User Configuration
+  users = [
+    {
+      name   = "akash.test"
+      enable = false
+    },
+    {
+      name   = "gireesh.test"
+      enable = true
+    },
+    {
+      name   = "somisetty"
+      enable = false
+    }
+  ]
+  aws_region = "us-east-1"
+  child_profile = "child-ab"
+}
+
+
+#### S3 Data
+
+iam_s3_modification_deletion = "PreventS3ModificationDeletion"
+DenyS3BucketModifications_Name = "DenyS3BucketModifications"
+
+### EKS Data
+
+eks_deny_iam_policy_name = "EKSDenyIAMActionsPolicy"
