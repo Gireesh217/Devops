@@ -1,0 +1,45 @@
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev  # Change to your specific namespace if needed
+  name: developer-role
+  labels:
+    purpose: "developer-role"  # Replace space with a valid label value
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec", "pods/log", "services"]
+    verbs: ["get", "list", "create", "delete", "patch", "update"]
+ 
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets"]
+    verbs: ["get", "list", "create", "update", "delete"]
+ 
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list", "create", "update", "delete"]
+ 
+ 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: Role
+metadata:
+  namespace: dev  # Change to your specific namespace if needed
+  name: qa-test
+  labels:
+    purpose: "qa-test"  # Replace space with a valid label value
+rules:
+  - apiGroups: [""]
+    resources: ["pods", "pods/exec", "pods/log", "services"]
+    verbs: ["get", "list"]
+ 
+  - apiGroups: ["apps"]
+    resources: ["deployments", "replicasets", "statefulsets"]
+    verbs: ["get", "list"]
+ 
+  - apiGroups: ["batch"]
+    resources: ["jobs", "cronjobs"]
+    verbs: ["get", "list"]
+ 
+ 
+ 
+ 

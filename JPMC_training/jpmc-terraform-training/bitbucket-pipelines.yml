@@ -1,0 +1,42 @@
+#  Create a workflow to scan the repository using [tfsec](https://github.com/aquasecurity/trivy) to identify security vulnerabilities in the code 
+
+pipelines:
+  default:
+    - step:
+        name: Security Scan with Trivy
+        image: aquasec/trivy:latest
+        script:
+          # Cache Trivy vulnerability database to speed up subsequent scans
+          - mkdir -p $BITBUCKET_CLONE_DIR/.trivycache/
+          - trivy --cache-dir $BITBUCKET_CLONE_DIR/.trivycache/ image --download-db-only
+         
+          # Scan Infrastructure as Code files
+          - trivy config --severity HIGH,CRITICAL .
+         
+          # Scan filesystem for vulnerabilities
+          - trivy fs --severity HIGH,CRITICAL .
+         
+          # Optional: Scan specific Terraform directory if exists
+          - |
+            if [ -d "terraform" ]; then
+              echo "Scanning Terraform directory..."
+              trivy config --severity HIGH,CRITICAL ./terraform
+            fi
+        artifacts:
+          - trivy-results.json
+        caches:
+          - trivydb
+       
+definitions:
+  caches:
+    trivydb: .trivycache
+ 
+custom:
+  # Fail pipeline if HIGH or CRITICAL vulnerabilities are found
+  fail-on: HIGH,CRITICAL
+  # Exclude specific checks if needed
+  skip-checks:
+    - AWS018  # Example: Skip specific check
+    - GCP001  # Example: Skip specific check
+ 
+ 

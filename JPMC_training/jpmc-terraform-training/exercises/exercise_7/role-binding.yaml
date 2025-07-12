@@ -1,0 +1,31 @@
+
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: developer-role-binding
+  namespace: dev
+subjects:
+  - kind: User
+    name: "dabbugunta.gireesh@photon.com"  # Ensure this matches the actual user you are using
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: developer-role
+  apiGroup: rbac.authorization.k8s.io
+ 
+---
+apiVersion: rbac.authorization.k8s.io/v1
+kind: RoleBinding
+metadata:
+  name: qa-test-role-binding
+  namespace: dev
+subjects:
+  - kind: User
+    name: "rajeshkannan.ravikumar@photon.com"  # Ensure this matches the actual user you are using
+    apiGroup: rbac.authorization.k8s.io
+roleRef:
+  kind: Role
+  name: qa-test
+  apiGroup: rbac.authorization.k8s.io
+ 
+ 

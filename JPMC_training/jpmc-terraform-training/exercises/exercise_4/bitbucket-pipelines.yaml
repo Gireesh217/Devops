@@ -1,0 +1,33 @@
+
+# This is an example Starter pipeline configuration
+# Use a skeleton to build, test and deploy using manual and parallel steps
+# -----
+# You can specify a custom docker image from Docker Hub as your build environment.
+ 
+image: hashicorp/terraform:latest
+ 
+pipelines:
+  default:
+   
+    
+    - step:
+        name: 'Terraform format'
+        script:
+          - terraform fmt
+    - step:
+        name: 'Terraform plan'
+        script:
+          - cd exercises/exercise_4
+          - terraform init
+          - terraform plan
+ 
+    # The following deployment steps will be executed for each pipeline run. To configure your steps and conditionally deploy see https://support.atlassian.com/bitbucket-cloud/docs/configure-bitbucket-pipelinesyml/
+    - step:
+        name: 'Deployment to Staging'
+        deployment: staging
+        script:
+          - cd exercises/exercise_4
+          - terraform init
+          - terraform apply --auto-approve
+
+          

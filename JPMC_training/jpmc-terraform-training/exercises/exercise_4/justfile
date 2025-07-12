@@ -1,0 +1,14 @@
+# Function to simplify re-authenticating to AWS using AWS CLI
+aws_reauth:
+    echo "Re-authenticating to AWS..."
+    aws configure set aws_access_key_id "AKIAWDX6KX5ZVIXCXFFY"
+    aws configure set aws_secret_access_key "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"
+    aws configure set region "us-west-2"
+   
+# Format all Terraform files in the repository
+fmt dir:
+    terraform fmt --recursive {{dir}}
+ 
+ 
+validate dir:
+   terraform validate {{dir}}
